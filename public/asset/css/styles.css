@@ -1,0 +1,17 @@
+
+/* Estilo para la imagen de perfil circular */
+.profile-picture img {
+    border-radius: 50%;
+    overflow: hidden;
+}
+/* Estilo para alinear verticalmente el enlace con el sobre de correo electrónico */
+.email-icon {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.email-link {
+    display: inline-block;
+    vertical-align: middle;
+}
