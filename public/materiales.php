@@ -8,6 +8,8 @@ use eftec\bladeone\BladeOne;
 use App\BD\BD;
 use App\Modelo\Material;
 use App\DAO\MaterialDao;
+use App\Modelo\Usuario;
+use App\DAO\UsuarioDao;
 
 session_start();
 
@@ -18,6 +20,7 @@ $blade = new BladeOne($views, $cache, BladeOne::MODE_DEBUG);
 $bd = BD::getConexion();
 
 $materialDao = new MaterialDao($bd);
+$usuarioDao = new UsuarioDao($bd);
 $dest  ; $mateAdded;
 
 function validaNombre_FMaterial (String $foto):bool{
@@ -46,7 +49,7 @@ function guardaNFMaterial (String $picture):bool{
 if(isset($_SESSION['usuario'])){
     $usuario =$_SESSION['usuario'];
 
-  if (isset($_POST['add'])) {
+  if (isset($_POST['add'])) {   // si se ha pulsado el botón del formulario en formMateriales
         $descripcion = trim(filter_input(INPUT_POST, 'descripcion', FILTER_UNSAFE_RAW));
         $errorDescrip = empty($descripcion);
         
@@ -70,7 +73,7 @@ if(isset($_SESSION['usuario'])){
              echo $blade->run("formMateriales", compact('usuario','mateAdded'));
         }
     }
-    elseif (isset ($_REQUEST['edicion'])) {
+    elseif (isset ($_REQUEST['edicion'])) { //llamado de v. portada.blade sobre la descripción
     $id = $_REQUEST['id'];
     $material = $materialDao->recuperaMaterialPorId((int)$id);
     if($material!== null){
@@ -80,7 +83,7 @@ if(isset($_SESSION['usuario'])){
     }
     
     }
-    elseif (isset ($_POST['update'])) {     //************EDICION***************************
+    elseif (isset ($_POST['update'])) {     //************EDICION* botón de formulario de v editMaterial
         
         $fotoOld = trim(filter_input(INPUT_POST, 'fotoOld', FILTER_UNSAFE_RAW));
         
@@ -106,9 +109,16 @@ if(isset($_SESSION['usuario'])){
         }
         
     }
+    elseif (isset ($_REQUEST['matUsu'])){ //si se ha pulsado en un usuario desde v portada.blade
+        $idUsu = $_REQUEST['idUsu'];
+        $matsUsuario = $materialDao->recuperaMaterialesPorUsuario((int)$idUsu);
+        $usuSolicitado = $usuarioDao->recuperaUsuarioPorId((int)$idUsu);
+        echo $blade->run("materialUsuario", compact('usuario','matsUsuario','usuSolicitado'));
+        die();
+    }
     
     
-    else {
+    else { //si se pulsado el botón de nuevo material desde v portada.blade pero no se pulsada nada de la v formMateriales.blade
         echo $blade->run("formMateriales", compact('usuario'));
     }
 }else{

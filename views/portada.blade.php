@@ -4,7 +4,7 @@
 @section('cabecera')  
 <div class="float-start ms-5 mt-2">
     <div class="email-icon">
-        <a class="text-decoration-none text-dark" href="mensaje.php"><i class="bi bi-envelope h1"></i></a>
+        <a class="text-decoration-none text-dark" href="mensajes.php"><i class="bi bi-envelope h1"></i></a>
     </div>
 </div>
 
@@ -34,7 +34,7 @@
         @forelse($restoUsu as $usu)
         <tr class="text-center">
            <td><img src="<?=$usu->getFoto_perfil()?>" width="100" height="100"></td>
-            <td>{{$usu->getNombre()}}</td>
+           <td><a href="materiales.php?matUsu&idUsu=<?=$usu->getId()?>" class="text-decoration-none text-white">{{$usu->getNombre()}}</a></td>
             
         </tr>
         @empty

@@ -33,6 +33,7 @@ class MaterialDao {
     }
 
     function modificaMaterial(object $material, int $id) :bool{
+        $this->bd->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
         $sql = "update materiales set descripcion=:descripcion, foto=:foto where id=:id";
         $sth = $this->bd->prepare($sql);
         try {
@@ -48,6 +49,7 @@ class MaterialDao {
     }
 
     function eliminaMaterial(int $id) {
+        $this->bd->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
         $sql = "delete from materiales where id=:id";
         $stm = $this->bd->prepare($sql);
         try {

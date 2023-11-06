@@ -66,6 +66,32 @@ class UsuarioDao {
         $usuario = ($sth->fetch()) ?: null;
         return $usuario;
     }
+    function recuperaUsuarioPorId (int $id):?Usuario{
+        $this->bd->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+        $sql = 'select * from usuarios where id=:id';
+        $stm = $this->bd->prepare($sql);
+        try {
+            $stm->execute([':id'=>$id]);
+            $stm->setFetchMode(PDO::FETCH_CLASS, Usuario::class );
+            $usuario = ($stm->fetch())?:null;
+            return $usuario;
+        } catch (PDOException $ex) {
+            die("error al recuperar usuario por su id ".$ex->getMessage());
+        }
+    }
+    function recuperaUsuarioPorNombre (string $nombre):?Usuario{
+        $this->bd->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+        $sql = 'select * from usuarios where nombre=:nombre';
+        $stm = $this->bd->prepare($sql);
+        try {
+            $stm->execute([':nombre'=>$nombre]);
+            $stm->setFetchMode(PDO::FETCH_CLASS, Usuario::class );
+            $usuario = ($stm->fetch())?:null;
+            return $usuario;
+        } catch (PDOException $ex) {
+            die("error al recuperar usuario por su nombre ".$ex->getMessage());
+        }
+    }
     function existe_nombreUsuario(String $nombre):bool{
         $this->bd->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
         $sql = 'select nombre from usuarios';
@@ -81,7 +107,7 @@ class UsuarioDao {
     function recuperaRestoUsuarios ($propioUsuario):Array{
         $restoUsu = [];
         $this->bd->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-        $sql = 'select nombre,foto_perfil from usuarios';
+        $sql = 'select nombre,id,foto_perfil from usuarios';
         $sth = $this->bd->prepare($sql);
         try {
             $sth->execute();
